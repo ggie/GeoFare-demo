@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GeoFare — Automated System Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--page:#eaf1f8;--ctl:#fff;--ctx:#0f2a44;--ln:#c9d8e8;--night:#06182c;--cy:#22d3ee;--or:#e05c2a;--gr:#16a34a;--am:#d97706;--rd:#c2410c;--bl:#0b4f82;--sk:#4f86c6;--mu:#5b7089;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#050d18;--ctl:#0e2036;--ctx:#e6f0fa;--ln:#1d3a58}}
+:root[data-theme="dark"]{--page:#050d18;--ctl:#0e2036;--ctx:#e6f0fa;--ln:#1d3a58}
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{background:var(--page);color:var(--ctx);font:15px/1.4 "DM Sans",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:10px}
+.stage{position:relative;width:min(100%,calc((100dvh - 7.5rem)*16/9));aspect-ratio:16/9;container-type:inline-size;background:radial-gradient(120% 90% at 20% 0,#0d3a66,var(--night) 60%);border-radius:14px;overflow:hidden;color:#fff;font-size:1.4cqw;box-shadow:0 12px 40px #0006}
+.bg{position:absolute;inset:0;width:100%;height:100%}
+.sc{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .8s,visibility .8s}.sc.on{opacity:1;visibility:visible}
+.a{opacity:0}.on .a{animation:in .7s var(--d,0s) both}
+@keyframes in{from{opacity:0;transform:translateY(1.2cqw)}to{opacity:1;transform:none}}
+@keyframes out{to{opacity:0}}@keyframes dr{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@keyframes fl{to{stroke-dashoffset:-1}}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.25)}100%{transform:scale(1)}}@keyframes fi{to{opacity:1}}@keyframes ty{from{width:0}}
+h1,h2{font-family:Syne,sans-serif;font-weight:800;line-height:1.05}
+h2{font-size:3.4cqw;position:absolute;left:4cqw;top:3.4cqw;max-width:60cqw}
+.sub{position:absolute;left:4cqw;top:8.4cqw;color:#9fd6f0;font-size:1.5cqw;max-width:52cqw}
+.card{position:absolute;background:#fff;color:#0f2a44;border-radius:1.2cqw;padding:1.5cqw;box-shadow:0 1.5cqw 4cqw #0009;font-size:1.3cqw}
+.card b.t{display:block;font-family:Syne,sans-serif;font-size:1.6cqw;margin-bottom:.8cqw}
+.f{border:1px solid #c9d8e8;border-radius:.6cqw;padding:.6cqw .9cqw;margin:.4cqw 0 .9cqw;color:#0f2a44;background:#f4f7fb;white-space:nowrap;overflow:hidden}
+.f i{display:inline-block;overflow:hidden;vertical-align:bottom;font-style:normal;animation:ty 1.6s steps(20) var(--d,0s) both}
+.btn{display:inline-block;background:#0b4f82;color:#fff;border-radius:.6cqw;padding:.6cqw 1.3cqw;font-weight:700}
+.chip{display:inline-block;border-radius:2cqw;padding:.3cqw 1cqw;font-weight:700;font-size:1.2cqw;color:#fff}
+.cap{position:absolute;left:50%;bottom:2.2cqw;transform:translateX(-50%);max-width:78cqw;background:#041223d9;border-radius:.8cqw;padding:.7cqw 1.6cqw;text-align:center;font-size:clamp(11px,1.75cqw,28px);line-height:1.35;z-index:5;min-height:1.4em}
+.big{font-size:9cqw;position:absolute;left:6cqw;top:15cqw}
+.mat{border-collapse:collapse;width:100%}.mat td,.mat th{padding:.28cqw .8cqw;text-align:right;border-bottom:1px solid #dbe5f0}.mat th{background:#0b4f82;color:#fff}.mat td:first-child,.mat th:first-child{text-align:left}
+.on .mat tr.r{opacity:0;animation:fi .3s calc(var(--k)*.28s + 1s) forwards}.mat tr.hl{background:#fde6dc;font-weight:700}
+.kpi{background:#fff;color:#0f2a44;border-radius:.9cqw;padding:.8cqw 1cqw}.kpi b{display:block;font:800 2.6cqw Syne}.kpi span{font-size:1cqw;color:#5b7089}
+.st{display:inline-block;margin:.2cqw;padding:.4cqw 1cqw;border-radius:2cqw;background:#dbe5f0;color:#5b7089;font-weight:700}
+.on .st{animation:lit .5s calc(var(--k)*1.8s + 1s) forwards}@keyframes lit{to{background:var(--c);color:#fff}}
+.star{color:#cfd9e5;letter-spacing:.2cqw}.on .star{animation:gold .4s calc(var(--k)*.5s + 1s) forwards}@keyframes gold{to{color:#f5a623}}
+.nd{fill:#0b4f82;stroke:#22d3ee;stroke-width:.4}.nt{fill:#fff;font:700 2.3px "DM Sans";text-anchor:middle}.ns{fill:#9fd6f0;font:400 1.7px "DM Sans";text-anchor:middle}
+.ed{fill:none;stroke:#22d3ee;stroke-width:.5;stroke-linecap:round;stroke-dasharray:.05 .95;opacity:0}.on .ed{opacity:1;animation:fl 2.4s linear infinite;animation-delay:var(--d,0s)}
+.lb{fill:#ffd9c9;font:500 1.9px "DM Sans";text-anchor:middle}
+.ctl{width:min(100%,calc((100dvh - 7.5rem)*16/9));display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ctl button{font:700 14px "DM Sans";border:1px solid var(--ln);background:var(--ctl);color:var(--ctx);border-radius:8px;padding:6px 12px;cursor:pointer}.ctl button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+#pg{flex:1;min-width:200px;display:flex;gap:3px}#pg button{padding:0;height:12px;border-radius:3px;position:relative;overflow:hidden}#pg i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--or)}
+#ov{position:absolute;inset:0;z-index:9;background:#06182ce6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4cqw;text-align:center}
+#ov button{font:800 2cqw Syne;background:var(--or);color:#fff;border:0;border-radius:3cqw;padding:1cqw 3cqw;cursor:pointer}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important}}
+</style></head><body>
+<div class="stage" id="st">
+<svg class="bg" viewBox="0 0 160 90" preserveAspectRatio="none"><g fill="none" stroke="#22d3ee" stroke-linecap="round" opacity=".28"><path id="r1" d="M-5 70C25 62 40 40 70 46S120 70 165 30" stroke-width=".45"/><path d="M20 95C35 60 60 20 95 8" stroke-width=".35"/><path d="M-5 20C40 30 90 25 110 60S150 80 165 85" stroke-width=".35"/><path d="M60 95C70 70 120 50 165 55" stroke-width=".3"/></g>
+<g stroke="#fff" stroke-width=".8" fill="none" stroke-linecap="round"><circle r="1.1" cx="-1.6" cy="1"/><circle r="1.1" cx="1.6" cy="1"/><path d="M-1.6 1L-.3-1H1.2L1.6 1M-.3-1L-.6-2.2H.5"/><animateMotion dur="16s" repeatCount="indefinite" rotate="auto"><mpath href="#r1"/></animateMotion></g></svg>
+
+<section class="sc" id="s0"><h1 class="big a" style="--d:.2s">GeoFare</h1>
+<p class="a" style="--d:.9s;position:absolute;left:6.2cqw;top:27cqw;width:56cqw;font-size:1.9cqw;color:#cfeaf8">A GIS-Based Motorcycle Taxi Fare Computation and Management System Using Road-Network Distance in Manolo Fortich, Bukidnon</p>
+<p class="a" style="--d:1.6s;position:absolute;left:6.2cqw;top:40cqw;color:#ff9b73;font-weight:700;font-size:1.5cqw">Northern Bukidnon State College · Institute for Computer Studies</p></section>
+
+<section class="sc" id="s1"><h2 class="a">Know your fare before you ride.</h2><span class="chip a" style="--d:.6s;position:absolute;left:4cqw;top:12cqw;background:#0b4f82">Joint Resolution No.1 s. 2026</span>
+<div style="position:absolute;left:4cqw;top:19cqw;width:50cqw;font-size:2cqw;line-height:1.7">
+<p class="a" style="--d:2s">A new flexible fare matrix for habal-habal rides</p><p class="a" style="--d:6s;color:#ffd9c9">Many passengers don’t know the official fares</p><p class="a" style="--d:10s;color:#ffd9c9">Confusion, and sometimes overcharging</p><p class="a" style="--d:15s;color:#7ff0ff;font-weight:700">GeoFare: fares from real road distance, one accountable platform for commuters, riders and MFRTA</p></div></section>
+
+<section class="sc" id="s2"><h2 class="a">Sign in. Choose a role.</h2>
+<div class="card a" style="--d:.5s;left:4cqw;top:12cqw;width:30cqw"><b class="t">Sign in to GeoFare</b>Email Address<div class="f"><i style="--d:1.5s">commuter@example.com</i></div>Password<div class="f"><i style="--d:3.2s">••••••••••</i></div><span class="btn">Sign in</span><p style="margin-top:.8cqw;color:#5b7089">Need an account? Sign up</p></div>
+<div class="card a" style="--d:8s;left:37cqw;top:12cqw;width:30cqw"><b class="t">Account Type</b><span class="chip" style="background:#0b4f82">Commuter</span> <span class="chip" style="background:var(--or)">Habal-Habal Rider</span>
+<p style="margin-top:.8cqw">Ally / Group / Association</p><div class="f">&nbsp;</div><p>Registered Business Permit No.</p><div class="f">&nbsp;</div><p>Plate Number</p><div class="f">&nbsp;</div></div>
+<div style="position:absolute;right:4cqw;top:13cqw;width:23cqw;font:700 1.7cqw Syne"><p class="a" style="--d:14s;margin-bottom:1cqw;color:#9fd6f0;font:400 1.4cqw 'DM Sans'">Workspace opens by role</p><div class="card a" style="--d:15s;position:static;margin-bottom:1cqw;padding:1cqw">Commuter</div><div class="card a" style="--d:16.5s;position:static;margin-bottom:1cqw;padding:1cqw">Habal-Habal Rider</div><div class="card a" style="--d:18s;position:static;margin-bottom:1cqw;padding:1cqw">Authorized Responder</div><div class="card a" style="--d:19.5s;position:static;padding:1cqw">Administrator / MFRTA</div></div></section>
+
+<section class="sc" id="s3"><h2 class="a">Fare Calculator</h2><p class="sub a" style="--d:.4s">Tap on map • Distance via actual roads</p>
+<svg viewBox="0 0 160 90" style="position:absolute;left:2cqw;top:13cqw;width:64cqw"><g fill="none" stroke="#22d3ee" stroke-linecap="round" opacity=".5"><path d="M10 70C30 66 40 50 60 52S90 60 100 40" stroke-width=".4"/><path d="M30 80C40 50 60 30 90 20" stroke-width=".3"/><path d="M5 30C40 40 70 30 100 70" stroke-width=".3"/></g>
+<line x1="22" y1="66" x2="104" y2="32" stroke="#fff" stroke-width=".4" stroke-dasharray="1.2 1.2" opacity="0" class="dl"/>
+<path d="M22 66C34 60 42 48 62 52S92 56 104 32" fill="none" stroke="#e05c2a" stroke-width="1.2" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" class="rt"/>
+<g class="a" style="--d:3s"><circle cx="22" cy="66" r="2.4" fill="#16a34a" stroke="#fff"/><text x="22" y="62" fill="#fff" font-size="3" text-anchor="middle">Pickup Point</text></g><g class="a" style="--d:5s"><circle cx="104" cy="32" r="2.4" fill="#e05c2a" stroke="#fff"/><text x="104" y="28" fill="#fff" font-size="3" text-anchor="middle">Drop-off Point</text></g></svg>
+<style>.on .rt{animation:dr 5s 9s forwards}.on .dl{animation:fi 1s 7s forwards,out 1s 12s forwards}.on .pn{animation:out .6s 8s forwards}.on .vf{animation:fi .6s 9s forwards}</style>
+<div class="card a" style="--d:16s;right:4cqw;top:14cqw;width:25cqw"><b class="t">Estimated Fare</b><p>Distance</p><b style="font:800 2.4cqw Syne"><span data-n="3.42" data-d="2" data-t="16.3">0</span> km</b><p style="color:#5b7089">(road-network) · matrix bracket 4 km</p><hr style="margin:.8cqw 0;border:0;border-top:1px solid #dbe5f0"><p>Regular Fare</p><b style="font:800 3cqw Syne;color:#0b4f82" >₱40.00</b><p>Discounted Fare (PWD · SP · Senior)</p><b style="font:800 3cqw Syne;color:#e05c2a">₱32.00</b><p style="margin-top:.6cqw"><span class="btn">Save to History</span></p></div>
+<p class="a" style="--d:31s;position:absolute;right:4cqw;top:46cqw;width:25cqw;color:#7ff0ff;font-size:1.3cqw">Live GPS Fare Tracking: the commuter’s own GPS distance, shown as a running fare.</p></section>
+
+<section class="sc" id="s4"><h2 class="a">Habal-Habal Fare Matrix</h2><p class="sub a" style="--d:.4s">Joint Resolution No.1 s. 2026 — Manolo Fortich, Bukidnon</p>
+<div class="card a" style="--d:.6s;left:4cqw;top:14cqw;width:42cqw;font-size:1.15cqw;padding:1cqw"><table class="mat" id="mt"><tr><th>Distance (km)</th><th>Regular Fare / Head</th><th>Discounted (PWD, SP, Senior)</th></tr></table></div>
+<div style="position:absolute;right:4cqw;top:16cqw;width:40cqw;font-size:1.8cqw;line-height:1.6"><p class="a" style="--d:8s">3.42 km rounds up to the <b style="color:#ffb08f">4 km</b> bracket</p><p class="a" style="--d:9.5s"><b>₱40.00</b> regular · <b>₱32.00</b> discounted (20% off)</p><p class="a" style="--d:13s;color:#7ff0ff">Beyond 10 km, the last matrix step continues:</p><p class="a" style="--d:14.5s">12 km = ₱75 + 2 × ₱5 = <b>₱85.00</b><br>12 km = ₱60 + 2 × ₱4 = <b>₱68.00</b> discounted</p></div></section>
+
+<section class="sc" id="s5"><h2 class="a">Habal-Habal Rider Dashboard</h2><p class="sub a" style="--d:.4s">Serve fairly. Ride safely.</p>
+<div class="card a" style="--d:.8s;left:4cqw;top:14cqw;width:26cqw"><b class="t">Verification</b><span class="chip pn" style="background:var(--am);position:absolute">Pending</span><span class="chip vf" style="background:var(--gr);opacity:0">Verified</span>
+<p style="margin:1cqw 0 .4cqw;color:#5b7089">Pending riders see limited modules until MFRTA verifies the account.</p><p><b>Fare compliance checker</b><br>Distance (km) and fare collected, checked against the active matrix.</p></div>
+<div class="card a" style="--d:10s;left:33cqw;top:14cqw;width:18cqw;text-align:center"><b class="t">My Unique Rider QR Code</b><svg id="qr" viewBox="0 0 21 21" style="width:100%"></svg><small style="color:#5b7089">sample code</small></div>
+<div class="card a" style="--d:14s;right:4cqw;top:14cqw;width:28cqw;line-height:1.9"><b class="t">Public rider profile</b>Rider Name <b>Sample Rider</b><br>Public Rider ID <b>GF-RDR-7K2M9QX4</b><br>Association / Group <b>Sample Riders Association</b><br>Plate Number <b>MF-1234</b><br>Business Permit No. <b>BP-0000 (sample)</b><br>Verification Status <span class="chip" style="background:var(--gr)">Verified</span><br>Average Rating <b>4.5 ★</b><p style="font-size:1cqw;color:#5b7089;line-height:1.3">Never shows a password or an email.</p></div></section>
+
+<section class="sc" id="s6"><h2 class="a">Ratings and reports, tied to the rider</h2>
+<div class="card a" style="--d:.6s;left:3cqw;top:14cqw;width:28cqw"><b class="t">Submit Rider Feedback</b>
+<p>Professionalism <span class="star" style="--k:0">★★★★★</span></p><p>Safety <span class="star" style="--k:1">★★★★★</span></p><p>Punctuality <span class="star" style="--k:2">★★★★☆</span></p><p>Service Quality <span class="star" style="--k:3">★★★★★</span></p><p style="margin-top:.8cqw"><span class="btn">Submit Rating</span> <small style="color:#5b7089">once per rider</small></p></div>
+<div class="a" style="--d:6s;position:absolute;left:34cqw;top:20cqw;width:24cqw;text-align:center"><span class="chip" style="background:var(--or);font-size:1.4cqw">GF-RDR-7K2M9QX4</span><svg viewBox="0 0 24 12" style="width:100%"><path d="M12 0V4M12 4L1 10M12 4L23 10" stroke="#22d3ee" stroke-width=".5" fill="none" stroke-dasharray="1 .8"/></svg><p style="color:#9fd6f0">Public Rider ID: ratings and reports attach to this rider</p></div>
+<div class="card a" style="--d:12s;right:3cqw;top:14cqw;width:30cqw"><b class="t">Citizen Complaint Report</b>Reference No. <b>RPT-2026-3F9A1C7D52B0</b><p>Rider matched: registered rider</p><p>Violation: overcharging · Fare demanded ₱__</p><p>Identity: you may remain anonymous</p><p style="margin-top:.6cqw"><span class="btn">Generate Report Slip</span> <span class="chip" style="background:#0b4f82">New</span></p><p style="font-size:1.05cqw;color:#5b7089;margin-top:.5cqw">Identify, Incident, Submit. Unregistered riders are reported by plate.</p></div></section>
+
+<section class="sc" id="s7"><h2 class="a">Public Safety Center</h2><p class="sub a" style="--d:.4s">Critical channel for commuters and riders</p>
+<div class="card a" style="--d:.6s;left:4cqw;top:14cqw;width:28cqw"><b class="t">Send SOS Alert</b><p>What is happening?</p><div class="f"><i style="--d:2s">Unsafe situation on the road, need help.</i></div><div style="display:flex;gap:1cqw"><div class="f" style="flex:1;text-align:center">📷 Emergency photo</div><div class="f" style="flex:1;text-align:center">📍 GPS attached</div></div><span class="btn" style="background:var(--rd)">Send SOS Alert</span><p style="margin-top:.5cqw;color:#5b7089">SOS-2026-8K3D7Q1ZPA</p></div>
+<div class="card a" style="--d:6s;right:4cqw;top:14cqw;width:30cqw"><b class="t">Management Alert Queue</b><div style="display:flex;gap:.5cqw;margin-bottom:.8cqw"><div class="kpi" style="flex:1"><b>1</b><span>Total alerts</span></div><div class="kpi" style="flex:1"><b>1</b><span>Active alerts</span></div><div class="kpi" style="flex:1"><b>1</b><span>Critical</span></div></div>
+<span class="st" style="--k:0;--c:#0b4f82">New</span><span class="st" style="--k:1;--c:#4f86c6">Acknowledged</span><span class="st" style="--k:2;--c:#d97706">Responded</span><span class="st" style="--k:3;--c:#16a34a">Resolved</span></div>
+<p class="a" style="--d:14s;position:absolute;left:4cqw;right:4cqw;top:40cqw;color:#ffd9c9;font-size:1.3cqw">GeoFare records and coordinates safety alerts. It does not replace 911, police, medical, or other emergency services.</p></section>
+
+<section class="sc" id="s8"><h2 class="a">Administrator / MFRTA Dashboard</h2>
+<div id="kp" style="position:absolute;left:4cqw;top:12cqw;width:56cqw;display:grid;grid-template-columns:repeat(4,1fr);gap:.8cqw"></div>
+<div class="card a" style="--d:4s;right:4cqw;top:12cqw;width:30cqw"><b class="t">Pending Rider Verification</b>Sample Rider · MF-1234<br><span class="btn" style="background:var(--gr);padding:.3cqw 1cqw">Verify</span> <span class="btn" style="background:var(--rd);padding:.3cqw 1cqw">Reject</span></div>
+<div class="card a" style="--d:12s;right:4cqw;top:25cqw;width:30cqw;font-size:1.1cqw"><b class="t">Activity / Audit Logs</b><p class="a" style="--d:13s">Admin verified rider</p><p class="a" style="--d:15s">Fare matrix updated</p><p class="a" style="--d:17s">Report status changed</p><p class="a" style="--d:19s">Safety alert status changed</p></div>
+<p class="a" style="--d:6s;position:absolute;left:4cqw;top:40cqw;width:56cqw;color:#9fd6f0;line-height:1.8;font-size:1.4cqw">Registered Riders · Fare Matrix Management · User Management · Reports &amp; Safety Management · Route Calculation Records · Ratings Monitoring</p></section>
+
+<section class="sc" id="s9"><h2 class="a">How everything connects</h2>
+<svg viewBox="0 0 160 90" style="position:absolute;inset:0;width:100%;height:100%">
+<g class="a" style="--d:.5s"><rect class="nd" x="6" y="14" width="28" height="9" rx="2"/><text class="nt" x="20" y="19.6">Commuter</text><rect class="nd" x="6" y="66" width="28" height="9" rx="2"/><text class="nt" x="20" y="71.6">Habal-Habal Rider</text></g>
+<g class="a" style="--d:1.2s"><rect class="nd" x="60" y="10" width="32" height="11" rx="2"/><text class="nt" x="76" y="15">GIS Road-Network Engine</text><text class="ns" x="76" y="18.6">OpenStreetMap · OSRM</text><rect class="nd" x="120" y="11" width="30" height="9" rx="2"/><text class="nt" x="135" y="16.6">Fare Matrix</text></g>
+<g class="a" style="--d:1.8s"><rect class="nd" x="58" y="40" width="36" height="11" rx="2" style="fill:#e05c2a"/><text class="nt" x="76" y="46.6">MFRTA Administration</text><rect class="nd" x="60" y="70" width="32" height="9" rx="2"/><text class="nt" x="76" y="75.6">Database (Supabase)</text><rect class="nd" x="120" y="70" width="30" height="9" rx="2"/><text class="nt" x="135" y="75.6">Audit Log</text></g>
+<g pathLength="1"><path class="ed" pathLength="1" d="M34 18L60 15" style="--d:3s"/><path class="ed" pathLength="1" d="M92 15L120 15" style="--d:4s"/><path class="ed" pathLength="1" d="M135 11Q78 -3 20 14" style="--d:5s"/>
+<path class="ed" pathLength="1" d="M30 66Q44 52 58 46" style="--d:8s"/><path class="ed" pathLength="1" d="M58 49Q44 66 30 74" style="--d:9s"/><path class="ed" pathLength="1" d="M26 24Q40 40 58 43" style="--d:12s"/>
+<path class="ed" pathLength="1" d="M94 43Q120 38 132 21" style="--d:15s"/><path class="ed" pathLength="1" d="M94 50Q125 56 132 69" style="--d:17s"/><path class="ed" pathLength="1" d="M76 51V70" style="--d:18s"/></g>
+<g class="lb a" style="--d:3s"><text x="46" y="11">pickup &amp; drop-off pins</text></g><g class="lb a" style="--d:4s"><text x="106" y="12">road distance (km)</text></g><g class="lb a" style="--d:5s"><text x="78" y="5">regular / discounted fare</text></g>
+<g class="lb a" style="--d:8s"><text x="30" y="55">registration</text><text x="28" y="64" style="fill:#b9f5c8">verification + QR profile</text></g><g class="lb a" style="--d:12s"><text x="31" y="38">ratings · reports · SOS</text></g><g class="lb a" style="--d:15s"><text x="122" y="38">fare rules</text></g><g class="lb a" style="--d:17s"><text x="116" y="62">every action recorded</text></g></svg></section>
+
+<section class="sc" id="s10"><h1 class="big a" style="font-size:6.6cqw;top:11cqw;width:80cqw">Know Your Fare. Know Your Rights.</h1>
+<p class="a" style="--d:2s;position:absolute;left:6cqw;top:32cqw;font:800 3cqw Syne;color:#ff9b73">GeoFare</p>
+<p class="a" style="--d:3s;position:absolute;left:6cqw;top:38cqw;font-size:1.6cqw;line-height:1.7;color:#cfeaf8">Northern Bukidnon State College · Institute for Computer Studies<br>Auggie John Fred G. Manginsay · Rian S. Cat-awan · Weniel A. Raña<br>Based on Joint Resolution No.1 s. 2026 · Interface data shown is sample data</p></section>
+
+<div class="cap" id="cap"></div>
+<div id="ov"><h1 style="font-size:5cqw">GeoFare</h1><p style="font-size:1.8cqw;max-width:56cqw;color:#cfeaf8">An automated walkthrough of the system: about 4½ minutes, narrated and captioned.</p><button id="go">Start the demo</button><label style="font-size:1.4cqw"><input type="checkbox" id="nv" checked> Play narration (uses your browser’s voice)</label></div>
+</div>
+<div class="ctl"><button id="pp">Pause</button><button id="rs">Restart</button><div id="pg"></div><span id="tm" style="font-size:13px;color:var(--ctx)"></span></div>
+<script>
+const V=[
+["Introduction",14,"Across Manolo Fortich, Bukidnon, the habal-habal connects neighborhoods, farms and town centers. This is GeoFare."],
+["The problem",24,"In 2026, Joint Resolution Number 1 introduced a new flexible fare matrix for habal-habal rides. Yet many passengers, especially the elderly, don’t know the official fares, and that can lead to confusion and overcharging. GeoFare answers with a GIS-based system that computes fares from real road distance, and gives commuters, riders and MFRTA one shared, accountable platform."],
+["Sign-in and roles",24,"Everything starts with a secure sign-in. Users register with an email address and choose an account type: Commuter, or Habal-Habal Rider. Riders also provide their association, business permit number and plate number. GeoFare then opens a workspace matched to the user’s role."],
+["Fare calculator",40,"The commuter dashboard opens with one promise: know your fare before you ride. In the Fare Calculator, the commuter taps a pickup point, then a drop-off point on the Manolo Fortich map. GeoFare doesn’t draw a straight line. It asks the road network for the route a rider would actually follow, and measures that. Here, the trip is three point four two kilometers by road. GeoFare rounds up to the next kilometer, matches it to the active fare matrix, and shows the regular fare, forty pesos, and the discounted fare for PWD, solo parents and senior citizens, thirty-two pesos. The result can be saved to fare history, or measured live with GPS."],
+["Fare matrix",22,"The fare matrix is the rulebook. Each distance bracket from one to ten kilometers has a regular fare and a discounted fare, twenty percent lower. Beyond ten kilometers, GeoFare continues the matrix using its last step. A twelve-kilometer ride, for example, comes to eighty-five pesos, or sixty-eight pesos discounted."],
+["Rider experience",28,"Riders get their own workspace. After signing up, a rider’s account is pending until MFRTA verifies it. Once verified, the rider receives a unique QR code linked to a public profile showing name, association, plate number, permit number and average rating, never a password or an email. Riders can also check a fare they collected against the active matrix."],
+["Ratings and reports",30,"Scanning the QR code, or searching the verified directory, opens the rider’s profile. From there, a commuter can rate the ride on professionalism, safety, punctuality and service quality, one to five stars each, once per rider. Ratings roll into the rider’s average. If something goes wrong, the commuter files a report: pick the rider, or enter a plate number, describe the incident, and generate a slip with its own reference number. MFRTA receives it, linked to that rider."],
+["Safety and SOS",22,"Safety has its own channel. In an emergency, a commuter or rider can send an SOS alert with a short description, a camera photo and their location. The alert appears in the administrator’s queue, where it is acknowledged, responded to and resolved, with every status tracked. GeoFare records and coordinates alerts. It does not replace 911 or emergency services."],
+["MFRTA administration",28,"For MFRTA administrators, GeoFare is the control room. The dashboard tracks users, riders, pending verifications, reports and active alerts. Administrators verify or reject riders, maintain the rider directory, manage versioned fare rules, edit accounts and roles, review reports and route calculations, and monitor ratings. Every administrative action is written to the audit log."],
+["How it connects",22,"Behind the screens, everything is connected. A commuter’s pins go to the GIS engine, which returns road distance. The fare matrix turns distance into a fare. Ratings, reports and alerts attach to riders and flow to MFRTA. And MFRTA’s decisions flow back out: fare rules to the calculator, verification to the public profile. Every action is recorded."],
+["Conclusion",18,"GeoFare brings fare computation, rider verification, accountability and public safety into one GIS-based system. Know your fare. Know your rights."]];
+const $=s=>document.querySelector(s),SC=[...document.querySelectorAll('.sc')],ss=window.speechSynthesis;
+let i=-1,t=0,play=false,sp=false,ca=[],tot=V.reduce((a,v)=>a+v[1],0);
+// matrix rows
+const M=[[1,20,16],[2,25,20],[3,30,24],[4,40,32],[5,45,36],[6,50,40],[7,60,48],[8,65,52],[9,70,56],[10,75,60]];
+$('#mt').insertAdjacentHTML('beforeend',M.map((r,k)=>`<tr class="r${r[0]==4?' hl':''}" style="--k:${k}"><td>${r[0]} km</td><td>₱${r[1]}.00</td><td>₱${r[2]}.00</td></tr>`).join('')+'<tr class="r" style="--k:10"><td>12 km (extended)</td><td>₱85.00</td><td>₱68.00</td></tr>');
+// admin KPIs
+const K=['Total Users','Commuter Accounts','Rider Accounts','Registered Riders','Verified Riders','Pending Verification','Active Fare Rows','Total Reports','Pending Reports','Resolved Reports','Active SOS Alerts'],KV=[48,31,17,17,14,3,10,9,4,5,1];
+$('#kp').innerHTML=K.map((k,j)=>`<div class="kpi a" style="--d:${.6+j*.3}s"><b data-n="${KV[j]}" data-t="${.8+j*.3}">0</b><span>${k}</span></div>`).join('');
+// sample QR (illustrative)
+let q='',r=7;const rnd=()=>(r=r*16807%2147483647)/2147483647,fp=(x,y)=>[[0,0],[14,0],[0,14]].some(([a,b])=>x>=a&&x<a+7&&y>=b&&y<b+7);
+for(let y=0;y<21;y++)for(let x=0;x<21;x++){let on;if(fp(x,y)){const a=x%14%7,b=y%14%7;on=a==0||a==6||b==0||b==6||(a>1&&a<5&&b>1&&b<5)}else on=rnd()>.5;if(on)q+=`<rect x="${x}" y="${y}" width="1" height="1"/>`}
+$('#qr').innerHTML=`<g fill="#0b4f82">${q}</g>`;
+// pager
+const pg=$('#pg');V.forEach((v,k)=>{const b=document.createElement('button');b.style.flex=v[1];b.title=v[0];b.setAttribute('aria-label',v[0]);b.innerHTML='<i></i>';b.onclick=()=>{if(i<0)start();go(k)};pg.append(b)});
+function cnt(e){const to=+e.dataset.n,dc=+(e.dataset.d||0),dl=+(e.dataset.t||0)*1000,s=performance.now();(function f(n){const p=Math.min(1,Math.max(0,(n-s-dl)/1400));e.textContent=(to*(1-Math.pow(1-p,3))).toFixed(dc);if(p<1&&e.closest('.on'))requestAnimationFrame(f)})(s)}
+function say(x){ss.cancel();sp=false;if(!$('#nv').checked||!ss)return;const u=new SpeechSynthesisUtterance(x);u.lang='en-US';u.rate=.96;const v=ss.getVoices().find(v=>/en[-_](US|GB|PH)/i.test(v.lang));if(v)u.voice=v;sp=true;u.onend=u.onerror=()=>sp=false;ss.speak(u)}
+function go(k){if(k>=V.length){play=false;$('#pp').textContent='Replay';return}k=Math.max(0,k);SC.forEach((e,j)=>e.classList.toggle('on',j==k));i=k;t=0;
+const s=V[k][2];ca=s.match(/[^.?!]+[.?!]/g).map(x=>x.trim());let c=0;ca=ca.map(x=>(c+=x.length,c/s.length));
+SC[k].querySelectorAll('[data-n]').forEach(cnt);say(s);cap()}
+function cap(){const f=Math.min(.999,t/V[i][1]);const s=V[i][2].match(/[^.?!]+[.?!]/g).map(x=>x.trim());$('#cap').textContent=s[Math.max(0,ca.findIndex(x=>x>f))]||s[s.length-1]}
+function start(){$('#ov').style.display='none';play=true;$('#pp').textContent='Pause';go(0)}
+$('#go').onclick=start;$('#rs').onclick=()=>{ss&&ss.cancel();start()};
+$('#pp').onclick=()=>{if(i<0)return start();if($('#pp').textContent=='Replay')return start();play=!play;$('#pp').textContent=play?'Pause':'Play';ss&&(play?ss.resume():ss.pause())};
+addEventListener('keydown',e=>{if(i<0)return;if(e.key==' '){e.preventDefault();$('#pp').click()}if(e.key=='ArrowRight')go(i+1);if(e.key=='ArrowLeft')go(i-1)});
+setInterval(()=>{if(!play||i<0)return;t+=.1;cap();const done=V.slice(0,i).reduce((a,v)=>a+v[1],0)+Math.min(t,V[i][1]);$('#tm').textContent=Math.floor(done/60)+':'+String(Math.floor(done%60)).padStart(2,'0')+' / '+Math.floor(tot/60)+':'+String(tot%60).padStart(2,'0');
+[...pg.children].forEach((b,j)=>b.firstChild.style.width=(j<i?100:j==i?Math.min(100,t/V[i][1]*100):0)+'%');
+if(t>=V[i][1]&&!sp)go(i+1)},100);
+</script></body></html>
